@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     'https://dimg04.c-ctrip.com/images/0zg43120009ggsk3n380D.jpg'
   ];
   double appBarAlpha = 0;
-  List<CommonModel> localNavList = [];
+  List<CommonModel>? localNavList;
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   void loadData() {
     HomeDao.fetch().then((value) {
       setState(() {
-        localNavList = value.localNavList ?? [];
+        localNavList = value.localNavList;
       });
     }).catchError((e) {
       print(e);
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(7, 4, 7, 4),
-                      child: LocalNav(localNavList: localNavList)),
+                      child: LocalNav(localNavList: localNavList ?? [])),
                   Container(
                     height: 800,
                     child: const ListTile(
