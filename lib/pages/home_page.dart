@@ -3,10 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:mock_ctrip/dao/home_dao.dart';
+import 'package:mock_ctrip/model/common_model.dart';
+import 'package:mock_ctrip/widget/local_nav.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -22,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     'https://dimg04.c-ctrip.com/images/0zg43120009ggsk3n380D.jpg'
   ];
   double appBarAlpha = 0;
-  String resultString = '';
+  List<CommonModel> localNavList = [];
 
   @override
   void initState() {
@@ -33,12 +37,10 @@ class _HomePageState extends State<HomePage> {
   void loadData() {
     HomeDao.fetch().then((value) {
       setState(() {
-        resultString = json.encode(value.config);
+        localNavList = value.localNavList ?? [];
       });
     }).catchError((e) {
-      setState(() {
-        resultString = e.toString();
-      });
+      print(e);
     });
   }
 
@@ -58,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0x00fff2f2),
       body: Stack(
         children: [
           MediaQuery.removePadding(
@@ -85,13 +88,16 @@ class _HomePageState extends State<HomePage> {
                           fit: BoxFit.fill,
                         );
                       },
-                      pagination: SwiperPagination(),
+                      pagination: const SwiperPagination(),
                     ),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(7, 4, 7, 4),
+                      child: LocalNav(localNavList: localNavList)),
                   Container(
                     height: 800,
-                    child: ListTile(
-                      title: Text(resultString),
+                    child: const ListTile(
+                      title: Text('resultString'),
                     ),
                   )
                 ],
@@ -102,8 +108,8 @@ class _HomePageState extends State<HomePage> {
             opacity: appBarAlpha,
             child: Container(
               height: 80,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Center(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text('首页'),
