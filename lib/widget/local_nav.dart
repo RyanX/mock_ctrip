@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mock_ctrip/model/common_model.dart';
 import 'package:mock_ctrip/model/grid_nav_model.dart';
 import 'package:mock_ctrip/widget/webview.dart';
+import 'package:mock_ctrip/widget/webview2.dart';
 
 class LocalNav extends StatelessWidget {
   final List<CommonModel> localNavList;
@@ -41,7 +42,7 @@ class LocalNav extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => WebView(
+                builder: (context) => WebView2(
                       url: model.url,
                       statusBarColor: model.statesBarColor,
                       hideAppBar: model.hideAppBar,
