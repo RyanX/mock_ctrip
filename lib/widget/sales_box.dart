@@ -4,9 +4,11 @@ import 'package:mock_ctrip/model/grid_nav_model.dart';
 import 'package:mock_ctrip/widget/webview.dart';
 import 'package:mock_ctrip/widget/webview2.dart';
 
+import '../model/sales_box_model.dart';
+
 ///底部卡片入口
 class SalesBox extends StatelessWidget {
-  final List<CommonModel>? salesBox;
+  final SalesBoxModel salesBox;
 
   const SalesBox({Key? key, required this.salesBox}) : super(key: key);
 
@@ -16,68 +18,117 @@ class SalesBox extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(7),
-        child: _items(context),
-      ),
+      child: _items(context),
     );
   }
 
   _items(BuildContext context) {
     if (salesBox == null) return null;
     List<Widget> items = [];
-    for (var model in salesBox!) {
-      items.add(_item(context, model));
-    }
-    // 计算第一行显示的数量
-    int separate = (salesBox!.length / 2 + 0.5).toInt();
+    items.add(_doubleItem(
+        context, salesBox.bigCard1!, salesBox.bigCard2!, true, false));
+    items.add(_doubleItem(
+        context, salesBox.smallCard1!, salesBox.smallCard2!, false, false));
+    items.add(_doubleItem(
+        context, salesBox.smallCard3!, salesBox.smallCard4!, false, true));
+
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: items.sublist(0, separate),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
+        Container(
+          height: 44,
+          margin: const EdgeInsets.only(left: 10),
+          decoration: const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(width: 1, color: Color(0xfff2f2f2)))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: items.sublist(separate, salesBox?.length),
+            children: [
+              Image.network(
+                salesBox.icon!,
+                height: 15,
+                fit: BoxFit.fill,
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10, 1, 8, 1),
+                margin: const EdgeInsets.only(right: 7),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: const LinearGradient(
+                        colors: [Color(0xffff4e63), Color(0xffff6cc9)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight)),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                WebView(url: salesBox.moreUrl, title: '更多活动')));
+                  },
+                  child: const Text(
+                    '获取更多福利 >',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+              )
+            ],
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: items.sublist(0, 1),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: items.sublist(1, 2),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: items.sublist(2, 3),
         )
       ],
     );
   }
 
-  Widget _item(BuildContext context, CommonModel model) {
-    return Expanded(
-        flex: 1,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => WebView2(
-                          url: model.url,
-                          statusBarColor: model.statesBarColor,
-                          hideAppBar: model.hideAppBar,
-                        )));
-          },
-          child: Column(
-            children: [
-              Image.network(
-                model.icon ?? '',
-                width: 18,
-                height: 18,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Text(
-                  model.title ?? '',
-                  style: const TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ));
+  _doubleItem(BuildContext context, CommonModel leftCard, CommonModel rightCard,
+      bool isBig, bool isLast) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _item(context, leftCard, isBig, true, isLast),
+        _item(context, rightCard, isBig, false, isLast)
+      ],
+    );
+  }
+
+  Widget _item(BuildContext context, CommonModel model, bool isBig, bool isLeft,
+      bool isLast) {
+    BorderSide borderSide =
+        const BorderSide(width: 0.8, color: Color(0xfff2f2f2));
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebView2(
+                      url: model.url,
+                      statusBarColor: model.statesBarColor,
+                      hideAppBar: model.hideAppBar,
+                    )));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border(
+                right: isLeft ? borderSide : BorderSide.none,
+                bottom: isLast ? BorderSide.none : borderSide)),
+        child: Image.network(
+          model.icon ?? '',
+          fit: BoxFit.fill,
+          // 获取屏幕宽度
+          width: MediaQuery.of(context).size.width / 2 - 10,
+          height: isBig ? 129 : 80,
+        ),
+      ),
+    );
   }
 }

@@ -6,9 +6,11 @@ import 'package:mock_ctrip/dao/home_dao.dart';
 import 'package:mock_ctrip/model/common_model.dart';
 import 'package:mock_ctrip/widget/grid_nav.dart';
 import 'package:mock_ctrip/widget/local_nav.dart';
+import 'package:mock_ctrip/widget/sales_box.dart';
 import 'package:mock_ctrip/widget/sub_nav.dart';
 
 import '../model/grid_nav_model.dart';
+import '../model/sales_box_model.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -33,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   List<CommonModel>? localNavList;
   GridNavModel? gridNavModel;
   List<CommonModel>? subNavList;
+  SalesBoxModel? salesBox;
 
   @override
   void initState() {
@@ -46,6 +49,7 @@ class _HomePageState extends State<HomePage> {
         localNavList = value.localNavList;
         gridNavModel = value.gridNav;
         subNavList = value.subNavList;
+        salesBox = value.salesBox;
       });
     }).catchError((e) {
       print(e);
@@ -108,6 +112,9 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                       padding: const EdgeInsets.fromLTRB(7, 0, 7, 4),
                       child: SubNav(subNavList: subNavList)),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(7, 0, 7, 4),
+                      child: SalesBox(salesBox: salesBox!)),
                   Container(
                     height: 800,
                     child: const ListTile(
