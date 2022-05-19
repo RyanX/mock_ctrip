@@ -8,7 +8,7 @@ import '../model/sales_box_model.dart';
 
 ///底部卡片入口
 class SalesBox extends StatelessWidget {
-  final SalesBoxModel salesBox;
+  final SalesBoxModel? salesBox;
 
   const SalesBox({Key? key, required this.salesBox}) : super(key: key);
 
@@ -26,11 +26,11 @@ class SalesBox extends StatelessWidget {
     if (salesBox == null) return null;
     List<Widget> items = [];
     items.add(_doubleItem(
-        context, salesBox.bigCard1!, salesBox.bigCard2!, true, false));
+        context, salesBox!.bigCard1!, salesBox!.bigCard2!, true, false));
     items.add(_doubleItem(
-        context, salesBox.smallCard1!, salesBox.smallCard2!, false, false));
+        context, salesBox!.smallCard1!, salesBox!.smallCard2!, false, false));
     items.add(_doubleItem(
-        context, salesBox.smallCard3!, salesBox.smallCard4!, false, true));
+        context, salesBox!.smallCard3!, salesBox!.smallCard4!, false, true));
 
     return Column(
       children: [
@@ -44,7 +44,7 @@ class SalesBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.network(
-                salesBox.icon!,
+                salesBox!.icon!,
                 height: 15,
                 fit: BoxFit.fill,
               ),
@@ -63,7 +63,7 @@ class SalesBox extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                WebView(url: salesBox.moreUrl, title: '更多活动')));
+                                WebView(url: salesBox?.moreUrl, title: '更多活动')));
                   },
                   child: const Text(
                     '获取更多福利 >',
