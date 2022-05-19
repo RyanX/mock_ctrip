@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                       // 滚动列表监听且是组件内的第一个元素时
                       _onScroll(scrollNotification.metrics.pixels);
                     }
-                    return true;
+                    return false;
                   },
                   child: _listView,
                 ),
