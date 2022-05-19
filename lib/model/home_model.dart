@@ -20,7 +20,7 @@ class HomeModel {
       this.salesBox});
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {
-    var bannerListJson = json['localNavList'] as List;
+    var bannerListJson = json['bannerList'] as List;
     List<CommonModel>? bannerList =
         bannerListJson.map((i) => CommonModel.fromJson(i)).toList();
 
