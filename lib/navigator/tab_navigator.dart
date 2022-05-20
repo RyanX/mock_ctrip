@@ -24,7 +24,9 @@ class _TabNavigatorState extends State<TabNavigator> {
         controller: _controller,
         children: <Widget>[
           HomePage(),
-          SearchPage(),
+          SearchPage(
+            hideLeft: true,
+          ),
           TravelPage(),
           MyPage(),
         ],
@@ -39,24 +41,21 @@ class _TabNavigatorState extends State<TabNavigator> {
         },
         type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: _defaultColor),
-              activeIcon: Icon(Icons.home, color: _activeColor),
-              label: '首页'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search, color: _defaultColor),
-              activeIcon: Icon(Icons.search, color: _activeColor),
-              label: '搜索'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt, color: _defaultColor),
-              activeIcon: Icon(Icons.camera_alt, color: _activeColor),
-              label: '旅拍'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle, color: _defaultColor),
-              activeIcon: Icon(Icons.account_circle, color: _activeColor),
-              label: '我的')
+          _item(Icon(Icons.home, color: _defaultColor),
+              Icon(Icons.home, color: _activeColor), '首页'),
+          _item(Icon(Icons.search, color: _defaultColor),
+              Icon(Icons.search, color: _activeColor), '搜索'),
+          _item(Icon(Icons.camera_alt, color: _defaultColor),
+              Icon(Icons.camera_alt, color: _activeColor), '旅拍'),
+          _item(Icon(Icons.account_circle, color: _defaultColor),
+              Icon(Icons.account_circle, color: _activeColor), '我的')
         ],
       ),
     );
+  }
+
+  _item(Icon icon, Icon activeIcon, String label) {
+    return BottomNavigationBarItem(
+        icon: icon, activeIcon: activeIcon, label: label);
   }
 }
