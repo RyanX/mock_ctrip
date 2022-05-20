@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mock_ctrip/dao/search_dao.dart';
 import 'package:mock_ctrip/widget/search_bar.dart';
+
+import '../model/search_model.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -9,6 +12,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  String showText = '';
+
   final PageController _controller = PageController(
     initialPage: 0,
   );
@@ -23,16 +28,25 @@ class _SearchPageState extends State<SearchPage> {
               hideLeft: true,
               defaultText: '嘿嘿',
               hint: '123',
-              leftButtonClick: (){
+              leftButtonClick: () {
                 Navigator.pop(context);
               },
-              onChanged: _onTextChanged)
+              onChanged: _onTextChanged),
+          InkWell(
+            onTap: () {
+              SearchDao.fetch('长城').then((SearchModel value) => {
+                    setState(() {
+                      showText = value.data?[0].url ?? '';
+                    })
+                  });
+            },
+            child: Text('Get'),
+          ),
+          Text(showText)
         ],
       ),
     );
   }
 
-  _onTextChanged(text){
-
-  }
+  _onTextChanged(text) {}
 }
