@@ -59,7 +59,7 @@ class _SearchBarState extends State<SearchBar> {
         children: [
           _wrapTap(
               Container(
-                padding: const EdgeInsets.fromLTRB(6, 5, 10, 5),
+                padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
                 child: widget.hideLeft ?? false
                     ? null
                     : const Icon(
@@ -156,8 +156,9 @@ class _SearchBarState extends State<SearchBar> {
                           color: Colors.black,
                           fontWeight: FontWeight.w300),
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.fromLTRB(0, 8.5, 0, 8.5),
-                          border: InputBorder.none,
+                          // contentPadding: const EdgeInsets.fromLTRB(0, 8.5, 0, 8.5),
+                          contentPadding: const EdgeInsets.all(0),
+                          border: const OutlineInputBorder(borderSide: BorderSide.none),
                           hintText: widget.hint ?? '',
                           hintStyle: const TextStyle(fontSize: 15)),
                     )
