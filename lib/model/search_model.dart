@@ -21,6 +21,7 @@ class SearchItem {
   final String? cityName; //虹桥
   final String? districtName; //上海
   final String? url;
+  final String? productScore;
 
   SearchItem(
       {this.word,
@@ -29,7 +30,8 @@ class SearchItem {
       // this.star,
       this.cityName,
       this.districtName,
-      this.url});
+      this.url,
+      this.productScore});
 
   factory SearchItem.fromJson(Map<String, dynamic> json) {
     return SearchItem(
@@ -39,6 +41,7 @@ class SearchItem {
         // star: json['star'],
         cityName: json['cityName'],
         districtName: json['districtName'],
-        url: json['url']);
+        url: json['url'],
+        productScore: json['productScore'].toString());
   }
 }

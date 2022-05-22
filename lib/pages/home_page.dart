@@ -3,6 +3,7 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:mock_ctrip/dao/home_dao.dart';
 import 'package:mock_ctrip/model/common_model.dart';
 import 'package:mock_ctrip/model/home_model.dart';
+import 'package:mock_ctrip/pages/search_page.dart';
 import 'package:mock_ctrip/widget/grid_nav.dart';
 import 'package:mock_ctrip/widget/loading_container.dart';
 import 'package:mock_ctrip/widget/local_nav.dart';
@@ -194,7 +195,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _jumpToSearch() {}
+  _jumpToSearch() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const SearchPage(
+        hint: SEARCH_BAR_DEFAULT_TEXT,
+      );
+    }));
+  }
 
   _jumpToSpeak() {}
 }
