@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mock_ctrip/model/common_model.dart';
 import 'package:mock_ctrip/model/grid_nav_model.dart';
 import 'package:mock_ctrip/widget/webview.dart';
-import 'package:mock_ctrip/widget/webview2.dart';
+import 'package:mock_ctrip/widget/webview.dart';
 
 import '../model/sales_box_model.dart';
 
@@ -63,7 +63,7 @@ class SalesBox extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                WebView(url: salesBox?.moreUrl, title: '更多活动')));
+                                Webview(url: salesBox?.moreUrl, title: '更多活动')));
                   },
                   child: const Text(
                     '获取更多福利 >',
@@ -110,7 +110,7 @@ class SalesBox extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => WebView2(
+                builder: (context) => Webview(
                       url: model.url,
                       statusBarColor: model.statesBarColor,
                       hideAppBar: model.hideAppBar,

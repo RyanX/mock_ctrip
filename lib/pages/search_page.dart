@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mock_ctrip/dao/search_dao.dart';
 import 'package:mock_ctrip/widget/search_bar.dart';
-import 'package:mock_ctrip/widget/webview2.dart';
+import 'package:mock_ctrip/widget/webview.dart';
 
 import '../model/search_model.dart';
 
@@ -120,7 +120,7 @@ class _SearchPageState extends State<SearchPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => WebView2(
+                builder: (context) => Webview(
                       url: item.url,
                       title: '详情',
                     )));

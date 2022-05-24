@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mock_ctrip/model/common_model.dart';
 import 'package:mock_ctrip/model/grid_nav_model.dart';
 import 'package:mock_ctrip/widget/webview.dart';
-import 'package:mock_ctrip/widget/webview2.dart';
+import 'package:mock_ctrip/widget/webview.dart';
 
 class GridNav extends StatelessWidget {
   final GridNavModel? gridNavModel;
@@ -122,7 +122,7 @@ class GridNav extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => WebView(
+                builder: (context) => Webview(
                       url: model.url,
                       title: model.title,
                       statusBarColor: model.statesBarColor,

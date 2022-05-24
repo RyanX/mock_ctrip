@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 const CATCH_URLS = ['m.ctrip.com/', 'm.ctrip.com/html5/', 'm.ctrip.com/html5'];
 
-class WebView extends StatefulWidget {
-  const WebView(
+class Webview extends StatefulWidget {
+  const Webview(
       {Key? key,
       this.url,
       this.statusBarColor,
@@ -22,45 +23,21 @@ class WebView extends StatefulWidget {
   final bool? backForbid;
 
   @override
-  _WebViewState createState() => _WebViewState();
+  State<StatefulWidget> createState() => _WebviewState();
 }
 
-class _WebViewState extends State<WebView> {
-  final webViewReference = FlutterWebviewPlugin();
-  StreamSubscription<String>? _onUrlChanged;
-  StreamSubscription<WebViewStateChanged>? _onStateChanged;
-  StreamSubscription<WebViewHttpError>? _onHttpError;
-  bool exiting = false;
+class _WebviewState extends State<Webview> {
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   void initState() {
     super.initState();
-    webViewReference.close();
-    _onUrlChanged = webViewReference.onUrlChanged.listen((String url) {});
-    _onStateChanged =
-        webViewReference.onStateChanged.listen((WebViewStateChanged state) {
-      switch (state.type) {
-        case WebViewState.startLoad:
-          if (_isToMain(state.url) && !exiting) {
-            if (widget.backForbid ?? false) {
-              webViewReference.launch(widget.url ?? '');
-            } else {
-              Navigator.pop(context);
-              exiting = true;
-            }
-          }
-          break;
-        default:
-          break;
-      }
-    });
-    _onHttpError =
-        webViewReference.onHttpError.listen((WebViewHttpError error) {
-      print(error);
-    });
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
-  _isToMain(String url) {
+  // 判断url是否是首页
+  bool _isToMain(String url) {
     bool contain = false;
     for (final value in CATCH_URLS) {
       if (url.endsWith(value)) {
@@ -71,13 +48,51 @@ class _WebViewState extends State<WebView> {
     return contain;
   }
 
-  @override
-  void dispose() {
-    _onUrlChanged?.cancel();
-    _onStateChanged?.cancel();
-    _onHttpError?.cancel();
-    webViewReference.dispose();
-    super.dispose();
+  // 自定义 appBar
+  Widget _appBar(Color backgroundColor, Color backButtonColor) {
+    if (widget.hideAppBar ?? false) {
+      return Container(
+        color: backButtonColor,
+        height: 25,
+      );
+    }
+    return Container(
+      color: backgroundColor,
+      padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+      child: FractionallySizedBox(
+        widthFactor: 1,
+        child: Stack(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 10),
+                child: Icon(
+                  Icons.close,
+                  color: backButtonColor,
+                  size: 26,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Text(
+                  widget.title ?? '',
+                  style: TextStyle(
+                    color: backButtonColor,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -94,63 +109,32 @@ class _WebViewState extends State<WebView> {
       body: Column(
         children: [
           _appBar(
-              Color(int.parse('0xff' + statusBarColorStr)), backButtonColor),
+            Color(int.parse('0xff' + statusBarColorStr)),
+            backButtonColor,
+          ),
           Expanded(
-              child: WebviewScaffold(
-            url: widget.url ?? '',
-            withZoom: true,
-            withLocalStorage: true,
-            hidden: true,
-            // initialChild: Container(
-            //   color: Colors.white,
-            //   child: const Center(
-            //     child: Text('Waiting...'),
-            //   ),
-            // ),
-          ))
-        ],
-      ),
-    );
-  }
-
-  _appBar(Color backgroundColor, Color backButtonColor) {
-    if (widget.hideAppBar ?? false) {
-      return Container(
-        color: backgroundColor,
-        height: 30,
-      );
-    }
-    return Container(
-      color: backgroundColor,
-      padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
-      child: FractionallySizedBox(
-        widthFactor: 1,
-        child: Stack(
-          children: [
-            GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
+            child: WebView(
+              initialUrl: widget.url,
+              javascriptMode: JavascriptMode.unrestricted,
+              gestureNavigationEnabled: true,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
               },
-              child: Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: Icon(
-                  Icons.close,
-                  color: backButtonColor,
-                  size: 26,
-                ),
-              ),
+              onProgress: (int progress) {
+                print("WebView is loading (progress : $progress%)");
+              },
+              navigationDelegate: (NavigationRequest request) {
+                return NavigationDecision.navigate;
+              },
+              onPageStarted: (String url) {
+                print('Page started loading: $url');
+              },
+              onPageFinished: (String url) {
+                print('Page finished loading: $url');
+              },
             ),
-            Positioned(
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Text(
-                    widget.title ?? '',
-                    style: TextStyle(color: backButtonColor, fontSize: 20),
-                  ),
-                ))
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

@@ -13,7 +13,7 @@ import 'package:mock_ctrip/widget/sub_nav.dart';
 
 import '../model/grid_nav_model.dart';
 import '../model/sales_box_model.dart';
-import '../widget/webview2.dart';
+import '../widget/webview.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 const SEARCH_BAR_DEFAULT_TEXT = '网红打卡地 景点 酒店 美食';
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WebView2(
+                      builder: (context) => Webview(
                             url: model.url,
                             title: model.title,
                             hideAppBar: model.hideAppBar,
