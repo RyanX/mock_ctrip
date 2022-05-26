@@ -1,4 +1,6 @@
 /// http://www.devio.org/io/flutter_app/json/travel_page.json
+/// https://m.ctrip.com/restapi/soa2/16189/json/searchTripShootListForHomePageV2?_fxpcqlniredt=09031084316977558113&x-traceID=09031084316977558113-1653552635149-2052601
+/// {"districtId":0,"groupChannelCode":"tourphoto_global1","type":1,"lat":-180,"lon":-180,"locatedDistrictId":0,"pagePara":{"pageIndex":1,"pageSize":10,"sortType":9,"sortDirection":0},"imageCutType":1,"head":{"cid":"09031084316977558113","ctok":"","cver":"1.0","lang":"01","sid":"8888","syscode":"09","auth":"","xsid":"","extension":[{"name":"tecode","value":"h5"}]}}
 class TravelTabModel {
   String? url;
   List<TravelTab>? tabs;
