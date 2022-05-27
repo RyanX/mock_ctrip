@@ -40,7 +40,7 @@ var Params = {
 };
 
 class TravelDao {
-  static Future<TravelModel> fetch(
+  static Future<TravelItemModel> fetch(
       String url, String groupChannelCode, int pageIndex, int pageSize) async {
     Map<String, dynamic> params = Params['pagePara'] as Map<String, dynamic>;
     params['pageIndex'] = pageIndex;
@@ -50,7 +50,7 @@ class TravelDao {
     if (response.statusCode == 200) {
       Utf8Decoder utf8decoder = const Utf8Decoder();
       var result = json.decode(utf8decoder.convert(response.bodyBytes));
-      return TravelModel.fromJson(result);
+      return TravelItemModel.fromJson(result);
     } else {
       throw Exception('Failed to load travel');
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mock_ctrip/model/travel_tab_model.dart';
+import 'package:mock_ctrip/pages/travel_tab_page.dart';
 
 import '../dao/travel_tab_dao.dart';
 
@@ -58,7 +59,9 @@ class _TravelPageState extends State<TravelPage> with TickerProviderStateMixin {
             child: TabBarView(
                 controller: _controller,
                 children: _tabs.map((tab) {
-                  return Text(tab.groupChannelCode ?? '');
+                  return TravelTabPage(
+                      travelUrl: travelTabModel?.url ?? '',
+                      groupChannelCode: tab.groupChannelCode ?? '');
                 }).toList()))
       ],
     ));

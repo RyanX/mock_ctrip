@@ -1,15 +1,15 @@
-class TravelModel {
+class TravelItemModel {
   int? totalCount;
   List<TravelItem>? resultList;
 
-  TravelModel({this.totalCount, this.resultList});
+  TravelItemModel({this.totalCount, this.resultList});
 
-  TravelModel.fromJson(Map<String, dynamic> json) {
+  TravelItemModel.fromJson(Map<String, dynamic> json) {
     totalCount = json['totalCount'];
     if (json['resultList'] != null) {
       resultList = <TravelItem>[];
       json['resultList'].forEach((v) {
-        resultList!.add(TravelItem.fromJson(v));
+        resultList?.add(TravelItem.fromJson(v));
       });
     }
   }
@@ -319,11 +319,11 @@ class Images {
   int? imageId;
   String? dynamicUrl;
   String? originalUrl;
-  int? width;
-  int? height;
+  double? width;
+  double? height;
   int? mediaType;
-  int? lat;
-  int? lon;
+  double? lat;
+  double? lon;
   bool? isWaterMarked;
 
   Images(
