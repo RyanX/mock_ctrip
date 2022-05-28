@@ -5,6 +5,7 @@ import 'package:mock_ctrip/model/travel_tab_model.dart';
 
 import '../dao/travel_tab_dao.dart';
 import '../model/travel_model.dart';
+import '../widget/loading_container.dart';
 import '../widget/webview.dart';
 
 const _TRAVEL_URL =
@@ -27,6 +28,8 @@ class _TravelTabPageState extends State<TravelTabPage>
     with AutomaticKeepAliveClientMixin {
   List<TravelItem>? travelItems;
   int pageIndex = 1;
+  bool _loading = true;
+  ScrollController _scrollController = ScrollController();
 
   @override
   bool get wantKeepAlive => true;
@@ -34,6 +37,12 @@ class _TravelTabPageState extends State<TravelTabPage>
   @override
   void initState() {
     _loadData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _loadData(loadMore: true);
+      }
+    });
     super.initState();
   }
 
@@ -45,19 +54,35 @@ class _TravelTabPageState extends State<TravelTabPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: MasonryGridView.count(
-      crossAxisCount: 2,
-      itemCount: travelItems?.length ?? 0,
-      itemBuilder: (context, index) {
-        return _TravelItems(index: index, item: travelItems?[index]);
-      },
+        body: LoadingContainer(
+      isLoading: _loading,
+      child: RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: MasonryGridView.count(
+                controller: _scrollController,
+                crossAxisCount: 2,
+                itemCount: travelItems?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return _TravelItems(index: index, item: travelItems?[index]);
+                },
+              ))),
     ));
   }
 
-  void _loadData() {
+  void _loadData({loadMore = false}) {
+    if (loadMore) {
+      pageIndex++;
+    } else {
+      pageIndex = 1;
+    }
+
     TravelDao.fetch(
             widget.travelUrl, widget.groupChannelCode, pageIndex, PAGE_SIZE)
         .then((model) {
+      _loading = false;
       setState(() {
         List<TravelItem> items = _filterItems(model.resultList);
         if (travelItems != null) {
@@ -67,6 +92,7 @@ class _TravelTabPageState extends State<TravelTabPage>
         }
       });
     }).catchError((onError) {
+      _loading = false;
       print(onError);
     });
   }
@@ -220,5 +246,9 @@ class _TravelTabPageState extends State<TravelTabPage>
         ],
       ),
     );
+  }
+
+  Future<void> _handleRefresh() async {
+    _loadData();
   }
 }
